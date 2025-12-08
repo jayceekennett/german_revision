@@ -5,3 +5,6 @@ The game includes modules for practising core linguistic skills such as selectin
 
 The nouns, verbs, adjectives, adverbs, and plural nouns were taken from freely available corpuses of German words and ordered by frequency.
 conjugations.csv holds the top 2897 most frequently used verbs in German, downloaded from https://gist.github.com/wanderingstan/7eaaf0e22461b505c749e268c0b72bc4
+
+## QUICKSTART
+Use 'pip install -e .' and to begin type german-revision.  

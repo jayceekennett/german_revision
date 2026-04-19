@@ -1,6 +1,6 @@
 [project]
 name = "german-revision"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
     { name = "Jaycee Kennett" }
 ]
@@ -8,7 +8,7 @@ authors = [
 license = { text = "MIT" }
 
 [project.scripts]
-german-revision = "german_revision.cli:main"
+german-revision = "german_revision.main:main"
 
 [tool.setuptools.package-data]
 german_revision = ["data/*.csv"]

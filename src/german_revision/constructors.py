@@ -1,9 +1,12 @@
 # constructors.py
 
-from german_revision.classes import Word, Spread, Verb, Verb_deck, Plural, Plural_deck, Article, Article_deck
-from german_revision.csv_loader import get_csvs, get_verbs
+from german_revision.classes import (Word, Spread, Verb, Verb_deck, 
+    Plural, Plural_deck, Article, Article_deck, Sentence, SentenceDeck)
+from german_revision.loader import get_csvs, get_verbs, get_json
 import random
 from typing import List
+from pathlib import Path
+import json
 
 
 # ------------------------------ CONSTRUCT WORD -------------------------------
@@ -113,6 +116,36 @@ def load_verb_deck(filename: str) -> Verb_deck:
     verb_deck = Verb_deck(name = "verbs", stack = verb_deck_list)
     return(verb_deck)
 
+# ------------------------------ CONSTRUCT SENTENCE_DECK ----------------------
+def scramble(sentence: str) -> str:
+    tokens = sentence.replace(".", "").split()
+    random.shuffle(tokens)
+    sentence = ", ".join(tokens)
+    return sentence
+
+
+def load_sentence_deck(filepath: str) -> SentenceDeck:
+    sentence_bank = get_json(filepath)
+    sentence_dict = {}
+    for k, v in sentence_bank.items():
+        sentence_list = []
+        for sentence in v:
+            scrambled = scramble(sentence)
+            single_sentence = Sentence(k,
+                                       scrambled,
+                                       sentence)
+            sentence_list.append(single_sentence)
+        sentence_dict[k] = sentence_list
+    
+    sentence_deck = SentenceDeck(name = "sentences",
+                                 stack = sentence_dict)
+    return sentence_deck
+
+
+def get_sentence_spread(sentence_list: list[Sentence], index: int) -> Sentence:
+    sentence =sentence_list[index]
+    return sentence 
+    
 
 # -------------------------GET VOCAB SPREAD -----------------------------------
 
@@ -137,6 +170,7 @@ def get_spread(deck, index, german_first) -> Spread:
         else:
             incorrect_words.append(word.german)
     options.extend(incorrect_words)
+    random.shuffle(options)
     constructed = Spread(options = options,
                          incorrect_options = incorrect_words, 
                          correct_answer = correct,
@@ -144,8 +178,6 @@ def get_spread(deck, index, german_first) -> Spread:
     return constructed
 
 # ------------------------------ GET VERB SPREAD ------------------------------
-
-# ab = abbreviated
 
 def get_verb_spread(deck: Verb_deck, n_verbs: int, freq: int) -> List[Verb]:
     indexes = []
@@ -193,10 +225,4 @@ def get_article_spread(deck: Article_deck, n_articles: int) -> List[Article]:
         j = full_stack[i]
         spread.append(j)
     return spread
-        
-    
-    
-        
-    
-
-    
+  
